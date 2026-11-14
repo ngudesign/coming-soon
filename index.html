@@ -8,55 +8,51 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234A2224' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 12c1-5 4.5-8 8-7.5 2.6.4 2 4.6-2 6.4-1.8.8-3.6 1-6 1.1 3.4.6 6 2.4 5.6 5-.4 2.4-3.6 1.6-5.6-5'/%3E%3Cpath d='M12 12c1-5 4.5-8 8-7.5 2.6.4 2 4.6-2 6.4-1.8.8-3.6 1-6 1.1 3.4.6 6 2.4 5.6 5-.4 2.4-3.6 1.6-5.6-5' transform='translate(24 0) scale(-1 1)'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Literata:ital,opsz,wght@1,7..72,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Literata:ital,opsz,wght@0,7..72,400;1,7..72,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
     /* Same palette as the portfolio */
     :root {
       --paper:  #FBFAF8;
       --accent: #4A2224;   /* Oxblood Ink */
       --muted:  #634F4E;
+      --ink:    #2B1719;
+      --rule:   #E8DFD8;
+      --blush:  #F3EDE8;
+      --tape:   rgba(220, 198, 180, .8);
     }
 
     * { box-sizing: border-box; }
-    html, body { margin: 0; height: 100%; }
+    html, body { margin: 0; }
 
     body {
       background: var(--paper);
       color: var(--accent);
-      display: grid;
-      place-items: center;
       min-height: 100vh;
       min-height: 100dvh;
-      padding: 24px 16px;
+      padding: 24px 16px 80px;
       -webkit-font-smoothing: antialiased;
     }
 
+    /* The name block is anchored at eye level (~40% down the screen), so
+       opening the collage adds content below it without moving the name. */
     main {
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       gap: 20px;
+      padding-top: max(32px, calc(40vh - 120px));
       animation: rise .9s cubic-bezier(.22, .7, .2, 1) both;
     }
 
-    /* Name logo: butterfly + name, as in the portfolio sidebar, larger */
+    /* Name logo, as in the portfolio sidebar, larger */
     .logo {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
       margin: 0;
       font-family: "Gloock", Georgia, serif;
       font-weight: 400;
       font-size: clamp(36px, 7vw, 56px);
       line-height: 1;
       letter-spacing: -0.01em;
-    }
-
-    .logo svg {
-      flex: none;
-      width: 0.9em;
-      height: 0.9em;
     }
 
     .tagline {
@@ -67,26 +63,259 @@
       color: var(--muted);
     }
 
+    /* ---------- "Currently" button ---------- */
+    .toggle {
+      margin-top: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px 9px 20px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--accent);
+      font-family: "Literata", Georgia, serif;
+      font-style: italic;
+      font-size: 17px;
+      line-height: 1;
+      cursor: pointer;
+      transition: background-color .25s ease, border-color .25s ease;
+    }
+    .toggle:hover { background: var(--blush); border-color: #DCCBC3; }
+    .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    .toggle .plus {
+      position: relative;
+      width: 11px;
+      height: 11px;
+      flex: none;
+      transition: transform .35s cubic-bezier(.3, .7, .2, 1);
+    }
+    .toggle .plus::before,
+    .toggle .plus::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 11px;
+      height: 1px;
+      background: currentColor;
+    }
+    .toggle .plus::after { transform: rotate(90deg); }
+    .toggle[aria-expanded="true"] .plus { transform: rotate(45deg); }   /* + becomes × */
+
+    /* ---------- Scattered collage: reading, watching, listening to ----------
+       Covers sit in normal page flow; the "scatter" is done with margins
+       (which move captions along with their covers) and small tilts, so
+       nothing can overlap at any screen size. */
+    .scrap {
+      margin-top: 40px;
+      width: min(880px, 100%);
+    }
+    .scrap[hidden] { display: none; }
+
+    .shelves {
+      display: grid;
+      grid-template-columns: repeat(3, auto);   /* each group sizes to its covers */
+      justify-content: space-between;
+      gap: 28px 24px;
+      align-items: start;
+    }
+
+    /* Groups sit at different heights */
+    .shelf:nth-child(2) { margin-top: 30px; }
+    .shelf:nth-child(3) { margin-top: 8px; }
+
+    .shelf h2 {
+      margin: 0 0 16px;
+      font: 500 10px/1 "Inter", sans-serif;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .shelf ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .item { width: 106px; }
+    .item.album { width: 124px; }   /* square art, a little wider so long album titles wrap evenly */
+
+    /* Each cover's own tilt (--r), drop (--y) and tape angle (--t) */
+    .item { margin-top: var(--y, 0px); }
+    .item .snap { transform: rotate(var(--r, 0deg)); }
+    .item .snap::before { transform: translateX(-50%) rotate(var(--t, -4deg)); }
+
+    .i1 { --r: -6deg;  --y: 0px;  --t: -8deg; }
+    .i2 { --r: 4deg;   --y: 26px; --t: 5deg;  }
+    .i3 { --r: -3deg;  --y: 12px; --t: 3deg;  }
+    .i4 { --r: 5deg;   --y: 0px;  --t: -6deg; }
+    .i5 { --r: -4deg;  --y: 20px; --t: 6deg;  }
+    .i6 { --r: 6deg;   --y: 2px;  --t: -10deg; }
+
+    /* Cover: white cut-out border, a strip of tape on top */
+    .snap {
+      position: relative;
+      background: #fff;
+      padding: 4px;
+      box-shadow: 0 7px 12px -8px rgba(74, 34, 36, .55);
+    }
+    .snap::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      width: 40px;
+      height: 14px;
+      background: var(--tape);
+    }
+    .snap img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .book img,
+    .movie img { aspect-ratio: 2 / 3; object-fit: cover; }   /* books and posters */
+    .album img { aspect-ratio: 1;     object-fit: cover; }
+
+    /* Captions: titles in Literata, people in small Inter caps */
+    .item figure { margin: 0; }
+    .item figcaption {
+      margin-top: 12px;
+      font-family: "Literata", Georgia, serif;
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--ink);
+      text-wrap: balance;   /* even line lengths, no lonely last word */
+    }
+    .item figcaption span {
+      display: block;
+      margin-top: 3px;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Reveal: covers drop in one after another, as if being pinned up */
+    .scrap:not([hidden]) .item {
+      animation: pin-up .6s cubic-bezier(.25, .8, .25, 1.15) both;
+      animation-delay: calc(var(--n) * 90ms);
+    }
+    .i1 { --n: 0; } .i2 { --n: 1; } .i3 { --n: 2; }
+    .i4 { --n: 3; } .i5 { --n: 4; } .i6 { --n: 5; }
+    .scrap:not([hidden]) .shelf h2 { animation: fade .5s ease both; }
+
+    @keyframes pin-up {
+      from { opacity: 0; transform: translateY(-18px) rotate(calc(var(--r, 0deg) * -1.5)) scale(.96); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+    @media (max-width: 900px) {
+      .shelves { grid-template-columns: 1fr; justify-content: center; gap: 44px; }
+      .shelf:nth-child(n) { margin-top: 0; }
+    }
+
     @keyframes rise {
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      main { animation: none; }
+      main,
+      .scrap:not([hidden]) .item,
+      .scrap:not([hidden]) .shelf h2 { animation: none; }
+      .toggle .plus { transition: none; }
     }
   </style>
 </head>
 <body>
   <main>
-    <h1 class="logo">
-      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 12c1-5 4.5-8 8-7.5 2.6.4 2 4.6-2 6.4-1.8.8-3.6 1-6 1.1 3.4.6 6 2.4 5.6 5-.4 2.4-3.6 1.6-5.6-5" />
-        <path d="M12 12c1-5 4.5-8 8-7.5 2.6.4 2 4.6-2 6.4-1.8.8-3.6 1-6 1.1 3.4.6 6 2.4 5.6 5-.4 2.4-3.6 1.6-5.6-5" transform="translate(24 0) scale(-1 1)" />
-      </svg>
-      Lisa Nguyen
-    </h1>
+    <h1 class="logo">Lisa Nguyen</h1>
     <p class="tagline">Portfolio coming soon</p>
+
+    <button class="toggle" type="button" aria-expanded="false" aria-controls="currently">
+      Currently <span class="plus" aria-hidden="true"></span>
+    </button>
+
+    <!-- ====== Update these whenever you start something new ======
+         Each cover has a class i1–i6 that sets its tilt, drop and tape angle. -->
+    <section class="scrap" id="currently" aria-label="Currently reading, watching and listening to" hidden>
+      <div class="shelves">
+        <section class="shelf" aria-labelledby="shelf-reading">
+          <h2 id="shelf-reading">Reading</h2>
+          <ul>
+            <li class="item book i1">
+              <figure>
+                <div class="snap"><img src="images/book-for-ever-more.jpg" alt="Cover of For Ever More by Sue Lynn Tan" width="397" height="600"></div>
+                <figcaption>For Ever More<span>Sue Lynn Tan</span></figcaption>
+              </figure>
+            </li>
+            <li class="item book i2">
+              <figure>
+                <div class="snap"><img src="images/book-east-of-eden.jpg" alt="Cover of East of Eden by John Steinbeck, Penguin Steinbeck Centennial Edition" width="329" height="500"></div>
+                <figcaption>East of Eden<span>John Steinbeck</span></figcaption>
+              </figure>
+            </li>
+          </ul>
+        </section>
+
+        <section class="shelf" aria-labelledby="shelf-watching">
+          <h2 id="shelf-watching">Watching</h2>
+          <ul>
+            <li class="item movie i3">
+              <figure>
+                <div class="snap"><img src="images/watch-ted-lasso.jpg" alt="Ted Lasso poster: Ted and the cast in AFC Richmond kit" width="400" height="600"></div>
+                <figcaption>Ted Lasso<span>TV series</span></figcaption>
+              </figure>
+            </li>
+            <li class="item movie i4">
+              <figure>
+                <div class="snap"><img src="images/watch-hamnet.jpg" alt="Poster for Hamnet, directed by Chloé Zhao" width="259" height="384"></div>
+                <figcaption>Hamnet<span>Chloé Zhao</span></figcaption>
+              </figure>
+            </li>
+          </ul>
+        </section>
+
+        <section class="shelf" aria-labelledby="shelf-listening">
+          <h2 id="shelf-listening">Listening to</h2>
+          <ul>
+            <li class="item album i5">
+              <figure>
+                <div class="snap"><img src="images/album-u-me-my-ego.jpg" alt="Album art for U, Me &amp; My Ego by Chxrry" width="600" height="600"></div>
+                <figcaption>U, Me &amp; My Ego<span>Chxrry</span></figcaption>
+              </figure>
+            </li>
+            <li class="item album i6">
+              <figure>
+                <div class="snap"><img src="images/album-this-music-may-contain-hope.jpg" alt="Album art for THIS MUSIC MAY CONTAIN HOPE. by RAYE" width="600" height="600"></div>
+                <figcaption>THIS MUSIC MAY CONTAIN&nbsp;HOPE.<span>RAYE</span></figcaption>
+              </figure>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </section>
   </main>
+
+  <script>
+    // "Currently" button: shows or hides the collage
+    const toggle = document.querySelector('.toggle');
+    const panel = document.getElementById('currently');
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      panel.hidden = open;
+    });
+  </script>
 </body>
 </html>
