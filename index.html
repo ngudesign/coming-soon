@@ -47,12 +47,25 @@
 
     /* Name logo, as in the portfolio sidebar, larger */
     .logo {
+      position: relative;
       margin: 0;
       font-family: "Gloock", Georgia, serif;
       font-weight: 400;
       font-size: clamp(36px, 7vw, 56px);
       line-height: 1;
       letter-spacing: -0.01em;
+    }
+
+    /* Butterfly floats above the name: absolutely positioned, so it adds
+       no height and the name, tagline and button stay exactly where they are */
+    .logo-mark {
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      width: 0.6em;
+      height: 0.6em;
+      margin-bottom: 0.32em;
+      transform: translateX(-50%);
     }
 
     .tagline {
@@ -110,7 +123,7 @@
        nothing can overlap at any screen size. */
     .scrap {
       margin-top: 40px;
-      width: min(880px, 100%);
+      width: min(960px, 100%);
     }
     .scrap[hidden] { display: none; }
 
@@ -158,6 +171,7 @@
     .i4 { --r: 5deg;   --y: 0px;  --t: -6deg; }
     .i5 { --r: -4deg;  --y: 20px; --t: 6deg;  }
     .i6 { --r: 6deg;   --y: 2px;  --t: -10deg; }
+    .i7 { --r: -2deg;  --y: 8px;  --t: -3deg; }
 
     /* Cover: white cut-out border, a strip of tape on top */
     .snap {
@@ -209,8 +223,8 @@
       animation: pin-up .6s cubic-bezier(.25, .8, .25, 1.15) both;
       animation-delay: calc(var(--n) * 90ms);
     }
-    .i1 { --n: 0; } .i2 { --n: 1; } .i3 { --n: 2; }
-    .i4 { --n: 3; } .i5 { --n: 4; } .i6 { --n: 5; }
+    .i1 { --n: 0; } .i7 { --n: 1; }
+    .i3 { --n: 3; } .i4 { --n: 4; } .i5 { --n: 5; } .i6 { --n: 6; }
     .scrap:not([hidden]) .shelf h2 { animation: fade .5s ease both; }
 
     @keyframes pin-up {
@@ -219,9 +233,16 @@
     }
     @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1000px) {
       .shelves { grid-template-columns: 1fr; justify-content: center; gap: 44px; }
       .shelf:nth-child(n) { margin-top: 0; }
+    }
+
+    /* Small phones: slightly smaller covers so three books keep the page margin */
+    @media (max-width: 420px) {
+      .item { width: 96px; }
+      .shelf ul { gap: 14px; }
+      .item figcaption span { font-size: 10px; letter-spacing: 0.04em; }
     }
 
     @keyframes rise {
@@ -239,7 +260,13 @@
 </head>
 <body>
   <main>
-    <h1 class="logo">Lisa Nguyen</h1>
+    <h1 class="logo">
+      <svg class="logo-mark" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 12c1-5 4.5-8 8-7.5 2.6.4 2 4.6-2 6.4-1.8.8-3.6 1-6 1.1 3.4.6 6 2.4 5.6 5-.4 2.4-3.6 1.6-5.6-5" />
+        <path d="M12 12c1-5 4.5-8 8-7.5 2.6.4 2 4.6-2 6.4-1.8.8-3.6 1-6 1.1 3.4.6 6 2.4 5.6 5-.4 2.4-3.6 1.6-5.6-5" transform="translate(24 0) scale(-1 1)" />
+      </svg>
+      Lisa Nguyen
+    </h1>
     <p class="tagline">Portfolio coming soon</p>
 
     <button class="toggle" type="button" aria-expanded="false" aria-controls="currently">
@@ -247,7 +274,7 @@
     </button>
 
     <!-- ====== Update these whenever you start something new ======
-         Each cover has a class i1–i6 that sets its tilt, drop and tape angle. -->
+         Each cover has a class i1–i7 that sets its tilt, drop and tape angle. -->
     <section class="scrap" id="currently" aria-label="Currently reading, watching and listening" hidden>
       <div class="shelves">
         <section class="shelf" aria-labelledby="shelf-reading">
@@ -259,10 +286,10 @@
                 <figcaption>For Ever More<span>Sue Lynn Tan</span></figcaption>
               </figure>
             </li>
-            <li class="item book i2">
+            <li class="item book i7">
               <figure>
-                <div class="snap"><img src="images/book-east-of-eden.jpg" alt="Cover of East of Eden by John Steinbeck, Penguin Steinbeck Centennial Edition" width="329" height="500"></div>
-                <figcaption>East of Eden<span>John Steinbeck</span></figcaption>
+                <div class="snap"><img src="images/book-theo-of-golden.jpg" alt="Cover of Theo of Golden by Allen Levi" width="395" height="600"></div>
+                <figcaption>Theo of Golden<span>Allen Levi</span></figcaption>
               </figure>
             </li>
           </ul>
