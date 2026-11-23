@@ -200,6 +200,15 @@
 
     /* Captions: titles in Literata, people in small Inter caps */
     .item figure { margin: 0; }
+
+    /* Extra-long titles may spread a little past their cover, into the gap
+       between covers, so they wrap into fewer, fuller lines */
+    .item figcaption.wide-caption { margin-left: -14px; margin-right: -14px; }
+    .shelf ul:has(.wide-caption) { gap: 32px; }   /* extra room beside the long title */
+    @media (max-width: 420px) {
+      .item figcaption.wide-caption { margin-left: -8px; margin-right: -6px; }
+      .shelf ul:has(.wide-caption) { gap: 22px; }
+    }
     .item figcaption {
       margin-top: 12px;
       font-family: "Literata", Georgia, serif;
@@ -282,8 +291,8 @@
           <ul>
             <li class="item book i1">
               <figure>
-                <div class="snap"><img src="images/book-for-ever-more.jpg" alt="Cover of For Ever More by Sue Lynn Tan" width="397" height="600"></div>
-                <figcaption>For Ever More<span>Sue Lynn Tan</span></figcaption>
+                <div class="snap"><img src="images/book-east-of-eden.jpg" alt="Cover of East of Eden by John Steinbeck, Penguin Steinbeck Centennial Edition" width="329" height="500"></div>
+                <figcaption>East of Eden<span>John Steinbeck</span></figcaption>
               </figure>
             </li>
             <li class="item book i7">
@@ -300,14 +309,14 @@
           <ul>
             <li class="item movie i3">
               <figure>
-                <div class="snap"><img src="images/watch-ted-lasso.jpg" alt="Ted Lasso poster: Ted and the cast in AFC Richmond kit" width="400" height="600"></div>
-                <figcaption>Ted Lasso<span>TV series</span></figcaption>
+                <div class="snap"><img src="images/watch-mormon-wives-oc.jpg" alt="The Secret Lives of Mormon Wives: Orange County, the cast in white on beach rocks" width="400" height="600"></div>
+                <figcaption class="wide-caption">The Secret Lives of Mormon Wives: Orange County<span>TV series</span></figcaption>
               </figure>
             </li>
             <li class="item movie i4">
               <figure>
-                <div class="snap"><img src="images/watch-hamnet.jpg" alt="Poster for Hamnet, directed by Chloé Zhao" width="259" height="384"></div>
-                <figcaption>Hamnet<span>Chloé Zhao</span></figcaption>
+                <div class="snap"><img src="images/watch-blue-eye-samurai.jpg" alt="Poster for Blue Eye Samurai, the Netflix animated series" width="282" height="353" style="object-position: left center"></div>
+                <figcaption>Blue Eye Samurai<span>TV series</span></figcaption>
               </figure>
             </li>
           </ul>
